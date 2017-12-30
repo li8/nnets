@@ -67,11 +67,24 @@ var generator =  (options) => {
 
   var clsr = (name,experiment)=>{
     return (cb)=>{
+      var images = "assets/datasets/"+name;
+      run_cmd( "python train.py --i "+ experiment.i +
+        " --j "+experiment.j+
+        " --k "+bestExp.k+
+        " --images "+images , {}, function(text) {
+          console.log("Tested for " + name + " : " + text);
+          var rslt = JSON.parse(text);
+          cb(null,rslt.accuracy);
+        });
 
     }
   }
   var clb =(experiment)=>{
     return (err,accuracy)=>{
+      if(err){
+          console.error(experiment.id + '=== > ', err.message);
+        return ;
+      }
       experiment.updateAttributes({
         accuracy: accuracy
       }).success(()=>{

@@ -174,7 +174,7 @@ module.exports = app => {
             var bestExp = experiments[highExpIndex];
             helper.runCmd( "python test.py --i "+ bestExp.i + " --j "+bestExp.j+" --k "+bestExp.k+" --image "+req.file.path , {}, function(text) {
           			console.log("Tested for " + name + " : " + text);
-                var rslt = JSON.parse(rslt);
+                var rslt = JSON.parse(text);
                 delete rslt.image;
                 res.status(200).json({result: rslt.img});
           		});

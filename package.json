@@ -1,0 +1,30 @@
+{
+  "name": "mapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon  --ext scss,js,html,jade,xas --exec 'node index.js'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/li8/nnets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/li8/nnets/issues"
+  },
+  "homepage": "https://github.com/li8/nnets#readme",
+  "dependencies": {
+    "consign": "^0.1.6",
+    "express": "^4.16.2",
+    "sequelize": "3.30.4",
+    "sqlite3": "^3.1.13"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.6"
+  }
+}

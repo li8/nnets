@@ -51,7 +51,7 @@ module.exports = app => {
     }
     DataSets.create(req.body)
       .then(result => {
-        helper.generator(name);
+        helper.generator(Experiments,name,null);
         res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
       })
       .catch(error => {
@@ -76,7 +76,7 @@ module.exports = app => {
           return;
         }
         if(dataset){
-          helper.generator(name);
+          helper.generator(Experiments,name,null);
           res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
         }else{
           res.status(412).json({msg:name + " - Dataset does not exist. Please create one using the /upload endpoint."})
@@ -109,7 +109,7 @@ module.exports = app => {
           j:req.body.j,
           k:req.body.k
         }
-        helper.generator(name,options);
+        helper.generator(Experiments,name,options);
         res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
       }else{
         res.status(412).json({msg:name + " - Dataset does not exist. Please create one using the /upload endpoint."})

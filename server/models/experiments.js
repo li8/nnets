@@ -16,6 +16,7 @@ module.exports = (sequelize, DataType) => {
     },
     accuracy:{
       type:DataType.DECIMAL,
+      default:null
     },
   }, {
     classMethods: {

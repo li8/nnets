@@ -9,10 +9,6 @@ module.exports = (sequelize, DataType) => {
       type: DataType.STRING,
       unique:true
     },
-    images: {
-      type: DataType.STRING,
-      unique:true
-    },
   }, {
     classMethods: {
       associate: (models) => {

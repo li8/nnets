@@ -3,3 +3,4 @@ package-lock.json
 assets/datasets
 assets/db
 ./tmp
+assets/public/apidoc/

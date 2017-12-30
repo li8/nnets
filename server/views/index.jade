@@ -1,3 +1,27 @@
 extend layout
 block content
-	div(id="")
+ .container-fluid
+   .row
+     #sidenav.span2
+       nav#scrollingNav
+         .sidenav-search
+         .clearfix
+         ul.sidenav.nav.nav-list.list
+     #content
+       #project
+         .pull-left
+           h1 DataSets
+         .clearfix
+       #header
+       #sections
+         section
+           table
+             thead
+               tr
+                 th(style='width: 50%') Name
+                 th(style='width: 50%') Status
+             tbody
+               each val, index in dataset
+                 tr
+                   td(style='width: 50%')= index
+                   td(style='width: 50%')= val

@@ -261,6 +261,21 @@ module.exports = app => {
     helper.getDataset(DataSets,name,cb);
   });
 
+  app.get('/', function(req, res){
+		if (req.accepts('html')) {
+			res.render('index', { dataset:{1:'one',2:'two',3:'three'} });
+			return;
+		}
+
+		// respond with json
+		if (req.accepts('json')) {
+			res.send({ error: 'Not found' });
+			return;
+		}
+
+		// default to plain-text. send()
+		res.type('txt').send('Not found');
+	});
 
 
 	app.get('*', function(req, res){

@@ -2,7 +2,10 @@ doctype
 html
   head
     title #{title} - NNets-mApi
-    link(rel='stylesheet', href='/css/app.css')
+    link(rel='stylesheet', href='/apidoc/vendor/bootstrap.min.css')
+    link(rel='stylesheet', href='/apidoc/vendor/prettify.css')
+    link(rel='stylesheet', href='/apidoc/css/style.css')
+    link(rel='icon', href='/apidoc/img/favicon.ico',type="image/x-icon")
+    script(src="/apidoc/vendor/polyfill.js")
   body
     block content
-  script(src='/js/app.js')

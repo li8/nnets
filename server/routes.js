@@ -215,7 +215,7 @@ module.exports = app => {
 
 
 
-  app.post('/test',helper.uploadTest.single(),function(req,res){
+  app.post('/test',helper.uploadTest.single('file'),function(req,res){
     var name = helper.getName(req);
     if(!name){
       res.status(412).json({msg:"Name parameters missing"});
@@ -239,36 +239,43 @@ module.exports = app => {
             // best scenario the first one
             var highExpIndex = null;
             var highAccuracy = null;
+            var msg = null;
             while(!breakLoop){
               if(expCount < experiments.length){
-                if(experiments[expCount].accuracy){
-                  res.status(200).json({msg:name + " dataset is still training."});
+                if(experiments[expCount].accuracy === null){
                   breakLoop = true;
+                  msg=name + " dataset is still training.";
+                  highAccuracy = null;
+                }else{
+                  if(highAccuracy === null ||  highAccuracy < experiments[expCount].accuracy){
+                    highAccuracy = experiments[expCount].accuracy;
+                    highExpIndex = expCount;
+                  }
+                  expCount = expCount +1;
+                  msg=null;
                 }
-                if(highAccuracy === null ||  highAccuracy < experiments[expCount].accuracy){
-                  highAccuracy = experiments[expCount].accuracy;
-                  highExpIndex = expCount;
-                }
-                expCount = expCount +1;
               }else{
                 // exit counter
                 breakLoop = true;
               }
             }
-            var bestExp = experiments[highExpIndex];
-            helper.runCmd( "python",["assets/py/test.py", "--i",bestExp.i,"--j",bestExp.j,"--k",bestExp.k,"--image",req.file.path] , function(text) {
-          			console.log("Tested for " + name + " : " + text);
+            if(highExpIndex !== null ){
+              var bestExp = experiments[highExpIndex];
+              helper.runCmd( "python",["assets/py/test.py", "--i",bestExp.i,"--j",bestExp.j,"--k",bestExp.k,"--image",req.file.path] , function(text) {
+                console.log("Tested for " + name + " : " + text);
                 var rslt = JSON.parse(text.replace(/\'/g,"\""));
                 delete rslt.image;
                 res.status(200).json({result: rslt});
-          		});
+              });
+            }else{
+              res.status(200).json({msg: msg});
+            }
           }else{
             res.status(412).json({ msg: "No experiment - found " });
           }
         }).catch(error=>{
           res.status(412).json({ msg: error.message });
         });
-        res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
       }else{
         res.status(412).json({msg:name + " - Dataset does not exist. Please create one using the /upload endpoint."})
       }

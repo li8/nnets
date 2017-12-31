@@ -1,5 +1,7 @@
 const multer  = require('multer');
 const cq = require('concurrent-queue');
+var fs = require('fs');
+var mime = require('mime');
 
 
 var queue = cq().limit({ concurrency: 10 });
@@ -18,21 +20,26 @@ var storage = multer.diskStorage({
     if(!name){
       cb(true,null);
     }else{
+      var dir = 'assets/datasets/'+name;
+
+      if (!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+      }
       cb(null, 'assets/datasets/'+name);
     }
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
+    cb(null, file.fieldname + '-' + Date.now()+'.' + mime.extension(file.mimetype))
   }
 });
 
 var storageTmp = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log("  name for test request", req.body.name);
-    cb(null, 'tmp/');
+    cb(null, 'assets/tmp/');
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
+    cb(null, file.fieldname + '-' + Date.now()+'.' + mime.extension(file.mimetype))
   }
 });
 
@@ -165,5 +172,6 @@ module.exports ={
   runCmd:run_cmd,
   getName:getName,
   upload:upload,
-  uploadTest:uploadTest
+  uploadTest:uploadTest,
+  getDataset:getDataset
 }

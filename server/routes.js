@@ -95,6 +95,10 @@ module.exports = app => {
         res.status(412).json({msg:"Name parameters missing"});
         return;
       }
+      if(name.split(" ").length > 1){
+        res.status(412).json({msg:"Name must be without space"});
+        return;
+      }
       var cb = (error,dataset)=>{
         if(error){
           res.status(412).json({ msg: error.message });
@@ -150,6 +154,10 @@ module.exports = app => {
     var name = helper.getName(req);
     if(!name){
       res.status(412).json({msg:"Precondition Failed: name"});
+      return;
+    }
+    if(name.split(" ").length > 1){
+      res.status(412).json({msg:"Name must be without space"});
       return;
     }
 
@@ -231,6 +239,10 @@ module.exports = app => {
     var name = helper.getName(req);
     if(!name){
       res.status(412).json({msg:"Name parameters missing"});
+      return;
+    }
+    if(name.split(" ").length > 1){
+      res.status(412).json({msg:"Name must be without space"});
       return;
     }
     var cb = (error,dataset)=>{

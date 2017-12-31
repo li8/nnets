@@ -36,11 +36,17 @@ module.exports = app => {
       return;
     }
     DataSets.create(req.body)
-      .then(result => {
-        helper.generator(Experiments,name,null);
+      .then(dataset => {
+        var optObj ={
+          Experiments:Experiments,
+          name:name,
+          DataSetId:dataset.id
+        };
+        helper.generator(optObj);
         res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
       })
       .catch(error => {
+        console.log("-----loca ", JSON.stringify(error.message));
         res.status(412).json({ msg: error.message });
       });
 
@@ -84,7 +90,12 @@ module.exports = app => {
           return;
         }
         if(dataset){
-          helper.generator(Experiments,name,null);
+          var optObj ={
+            Experiments:Experiments,
+            name:name,
+            DataSetId:dataset.id
+          };
+          helper.generator(optObj);
           res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
         }else{
           res.status(412).json({msg:name + " - Dataset does not exist. Please create one using the /upload endpoint."})
@@ -151,12 +162,16 @@ module.exports = app => {
         return;
       }
       if(dataset){
-        var options = {
+
+        var optObj ={
+          Experiments:Experiments,
+          name:name,
+          DataSetId:dataset.id,
           i:req.body.i,
           j:req.body.j,
           k:req.body.k
-        }
-        helper.generator(Experiments,name,options);
+        };
+        helper.generator(optObj);
         res.status(200).json({msg: name + " dataset added. Scheduled to generate experiments."})
       }else{
         res.status(412).json({msg:name + " - Dataset does not exist. Please create one using the /upload endpoint."})
@@ -241,7 +256,7 @@ module.exports = app => {
               }
             }
             var bestExp = experiments[highExpIndex];
-            helper.runCmd( "python test.py --i "+ bestExp.i + " --j "+bestExp.j+" --k "+bestExp.k+" --image "+req.file.path , {}, function(text) {
+            helper.runCmd( "python",["assets/py/test.py", "--i",bestExp.i,"--j",bestExp.j,"--k",bestExp.k,"--image",req.file.path] , function(text) {
           			console.log("Tested for " + name + " : " + text);
                 var rslt = JSON.parse(text);
                 delete rslt.image;
@@ -263,7 +278,17 @@ module.exports = app => {
 
   app.get('/', function(req, res){
 		if (req.accepts('html')) {
-			res.render('index', { dataset:{1:'one',2:'two',3:'three'} });
+      DataSets.findAll({
+        raw:true
+      }).then(datasets=>{
+          if(datasets.length == 0 ){
+              res.render('index', { dataset:{"----na-----":" no dataset uploaded"} });
+          }else{
+            res.render('index', { dataset:datasets });
+          }
+      }).catch(error=>{
+  			res.render('index', { dataset:{error:error.message} });
+      });
 			return;
 		}
 

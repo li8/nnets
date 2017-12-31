@@ -11,15 +11,18 @@ module.exports = app => {
    * @apiGroup Upload
    * @apiVersion 1.0.0
    * @apiParam {String} name DataSet Name
-   * @apiParamExample {json} Input
-   *    {
+   * @apiParamExample {form-data} Input
+   *
    *      "name": "set#1",
-   *    }
+   *      "dataset": "1.png",
+   *      "dataset": "2.png"
+   *
    * @apiSuccessExample {json} Success
    *    HTTP/1.1 200 OK
    *    {
    *      "msg": "set#1 dataset added. Scheduled to generate experiments.",
    *    }
+   *
    * @apiErrorExample {json} Error
    *    HTTP/1.1 412 Precondition Failed
    */
@@ -59,18 +62,22 @@ module.exports = app => {
      * @apiGroup Upload
      * @apiVersion 1.0.0
      * @apiParam {String} name DataSet Name
-     * @apiParamExample {json} Input
-     *    {
+     * @apiParamExample {form-data} Input
+     *
      *      "name": "set#1",
-     *    }
+     *      "dataset": "1.png",
+     *      "dataset": "2.png"
+     *
      * @apiSuccessExample {json} Success
      *    HTTP/1.1 200 OK
      *    {
      *      "msg": "set#1 dataset added. Scheduled to generate experiments.",
      *    }
+     *
      * @apiErrorExample {json} Error
      *    HTTP/1.1 412 Precondition Failed
      */
+
 
 
 
@@ -189,10 +196,11 @@ module.exports = app => {
      * @apiGroup Test
      * @apiVersion 1.0.0
      * @apiParam {String} name DataSet Name
-     * @apiParamExample {json} Input
-     *    {
+     * @apiParamExample {form-data} Input
+     *
      *      "name": "set#1"
-     *    }
+     *      "file": "10.png"
+     *
      * @apiSuccess {Decimal} i Experiment i
      * @apiSuccess {Decimal} j Experiment j
      * @apiSuccess {Decimal} k Experiment k

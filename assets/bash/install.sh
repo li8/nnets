@@ -20,3 +20,6 @@ rm -rf assets/datasets
 mkdir assets/datasets
 rm -rf assets/db
 mkdir assets/db
+
+rm -rf assets/tmp
+mkdir assets/tmp

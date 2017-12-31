@@ -243,9 +243,10 @@ module.exports = app => {
             while(!breakLoop){
               if(expCount < experiments.length){
                 if(experiments[expCount].accuracy === null){
-                  breakLoop = true;
                   msg=name + " dataset is still training.";
                   highAccuracy = null;
+                  highExpIndex = null;
+                  expCount = experiments.length;
                 }else{
                   if(highAccuracy === null ||  highAccuracy < experiments[expCount].accuracy){
                     highAccuracy = experiments[expCount].accuracy;

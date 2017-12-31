@@ -15,3 +15,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 9
 nvm use 9
 npm install
+rm -rf assets/datasets
+mkdir assets/datasets
+rm -rf assets/db
+mkdir assets/db

@@ -38,6 +38,10 @@ module.exports = app => {
       res.status(412).json({msg:"Precondition Failed"});
       return;
     }
+    if(name.split(" ").length > 1){
+      res.status(412).json({msg:"Name must be without space"});
+      return;
+    }
     DataSets.create(req.body)
       .then(dataset => {
         var optObj ={

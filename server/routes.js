@@ -291,7 +291,39 @@ module.exports = app => {
           if(datasets.length == 0 ){
               res.render('index', { dataset:{"----na-----":" no dataset uploaded"} });
           }else{
-            res.render('index', { dataset:datasets });
+            var rsltObj = [];
+            datasets.map(dataset=>{
+              Experiments.findAll({
+                where:{
+                  accuracy:{
+                    $eq:null
+                  }
+                }
+              }).then(experiments=>{
+                  var lObj = {
+                    name:dataset.name,
+                    status:false
+                  }
+                 if(experiments.length >0 ){
+                    lObj.status=false;
+                 }else{
+                    lObj.status=true;
+                 }
+                 rsltObj.push(lObj);
+                 console.log("status");
+                 console.log(rsltObj.length);
+                 console.log(rsltObj);
+                 console.log(datasets.length)
+                 console.log(datasets);
+                 if(rsltObj.length === datasets.length){
+                   res.render('index', { dataset:rsltObj });
+                   return;
+                 }
+              }).catch(error=>{
+          			res.send({ error: 'Not found' });
+                return;
+              });
+            })
           }
       }).catch(error=>{
   			res.render('index', { dataset:{error:error.message} });

@@ -12,7 +12,6 @@ queue.process(function (task, cb) {
 })
 
 
-
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log("name for request", req.body.name);
@@ -57,7 +56,7 @@ var upload = multer({ storage: storage ,fileFilter: imageFilter });
 
 var uploadTest = multer({ storage: storageTmp ,fileFilter: imageFilter });
 
-var generator =  (options) => {
+var generator =  (options,local) => {
   // options.Experiments
   // options.name
   // options.DataSetId
@@ -93,7 +92,7 @@ var generator =  (options) => {
           console.error(experiment.id + '=== > ', err.message);
         return ;
       }
-      console.log(accuracy);
+      debugger
       experiment.updateAttributes({
         accuracy: accuracy
       }).then(()=>{
@@ -116,11 +115,15 @@ var generator =  (options) => {
           DataSetId:options.DataSetId
         };
         console.log(expObj);
-        options.Experiments.create(expObj).then(experiment=>{
-          queue(clsr(options.name,experiment),clb(experiment));
-        }).catch(error=>{
-          console.error("Error in creating experiment");
-        });
+        if(local){
+            queue(clsr(options.name,local),clb(local));
+        }else{
+          options.Experiments.create(expObj).then(experiment=>{
+            queue(clsr(options.name,experiment),clb(experiment));
+          }).catch(error=>{
+            console.error("Error in creating experiment");
+          });
+        }
       })
     })
   })
@@ -167,11 +170,52 @@ var getName = (req,res)=>{
 };
 
 
+var scheduledCleanUp = (Experiments,DataSets)=>{
+  Experiments.findAll({
+    where:{
+      accuracy:{
+        $eq:null
+      },
+    }
+  }).then(experiments=>{
+    var filteredExp = experiments.filter(experiment=>{
+      // console.log("experiment's accuracy" , experiment.accuracy)
+      if(experiment.accuracy === null){
+        return experiment;
+      }
+    })
+    // console.log("filtered " , filteredExp);
+    filteredExp.map(fitExp=>{
+      DataSets.findOne({
+        where:{
+          id:fitExp.DataSetId
+        }
+      }).then(dataset=>{
+        var optObj ={
+          Experiments:Experiments,
+          name: dataset.name,
+          DataSetId:fitExp.DataSetId,
+          i:[fitExp.i],
+          j:[fitExp.j],
+          k:[fitExp.k]
+        };
+        generator(optObj,fitExp);
+      }).catch(error=>{
+        console.error("Err => ",error.message);
+      });
+    })
+  }).catch(error=>{
+    console.error("Err => ",error.message);
+  })
+}
+
+
 module.exports ={
   generator:generator,
   runCmd:run_cmd,
   getName:getName,
   upload:upload,
   uploadTest:uploadTest,
-  getDataset:getDataset
+  getDataset:getDataset,
+  force:scheduledCleanUp
 }

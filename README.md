@@ -7,3 +7,8 @@
 #### Run Development
 
     $> npm run dev
+
+
+#### Run Production
+
+    $> npm run start

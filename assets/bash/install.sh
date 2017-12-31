@@ -4,6 +4,7 @@
 # install sqlite3
 sudo apt-get update
 sudo apt-get install sqlite3 libsqlite3-dev
+sudo apt-get install python3
 
 # install nvm
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash

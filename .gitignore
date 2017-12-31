@@ -1,6 +1,6 @@
 node_modules
 package-lock.json
 assets/datasets
-assets/db
-assets/tmp
-assets/public/apidoc/
+assets/db/*
+assets/tmp/*
+assets/public/apidoc/*

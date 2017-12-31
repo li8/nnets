@@ -74,7 +74,7 @@ var generator =  (options) => {
         "--k",experiment.k,
         "--images",images], function(text) {
           console.log("Tested for " + name + " : " + text);
-          // var rslt = JSON.parse(text);
+          text = JSON.parse(text.replace(/\'/g,"\""));
           cb(null,text.accuracy);
         });
 
@@ -86,10 +86,11 @@ var generator =  (options) => {
           console.error(experiment.id + '=== > ', err.message);
         return ;
       }
+      console.log(accuracy);
       experiment.updateAttributes({
         accuracy: accuracy
       }).then(()=>{
-        console.log(experiment.id + '=== > done');
+        console.log(experiment.id + accuracy +'=== > done');
       }).catch((error)=>{
         console.error(experiment.id + '=== > ', error.message);
       });

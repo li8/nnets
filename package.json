@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "apidoc": "apidoc -i server -f routes.js  -o assets/public/apidoc",
-    "dev": "nodemon  --ext scss,js,html,jade,xas --ignore 'assets/public/apidoc/*' --exec 'rm -rf assets/public/apidoc  && apidoc -i server -f routes.js  -o assets/public/apidoc &&  node index.js'",
+    "dev": "nodemon  --ext scss,js,html,jade,xas --ignore 'assets/public/apidoc/*' --exec 'rm -rf assets/public/apidoc  && apidoc -i server -f routes.js  -o assets/public/apidoc &&  node --inspect index.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
